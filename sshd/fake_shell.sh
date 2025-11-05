@@ -3,10 +3,10 @@ set -euo pipefail
 
 cat <<'EOF'
 ================================================================
- FAKE DATA MODE
+ This is a honeypot SSH server running a fake shell.
+ Any commands you enter will not affect a real system.
 ================================================================
-Вы не являетесь авторизованным пользователем. Предоставляются
-только тестовые «фейковые» данные. Любая деятельность логируется.
+
 EOF
 
 # Simple "shell"
@@ -16,7 +16,7 @@ while true; do
   case "$cmd" in
     exit|quit) break ;;
     info) echo "Demo: fake dataset v1.0";;
-    help|?) echo "Команды: info, help, exit";;
-    *) echo "Команда недоступна в fake-режиме. help для списка.";;
+    help|?) echo "Commands: info, help, exit";;
+    *) echo "The command is not available in fake mode. Use help for a list.";;
   esac
 done
