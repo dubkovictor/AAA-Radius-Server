@@ -1,0 +1,42 @@
+services:
+  radius:
+    image: freeradius/freeradius-server:latest
+    platform: linux/amd64   # Запуск под эмуляцией, т.к. нет arm64-версии
+    container_name: radius
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
+    volumes:
+      - ./radius/clients.conf:/etc/freeradius/clients.conf:ro
+      - ./radius/users:/etc/freeradius/mods-config/files/authorize:ro
+      - ./radius/mods-enabled/pap:/etc/freeradius/mods-enabled/pap:ro
+    command: ["-f", "-X"]  # в фореграунде с дебаг-логами удобно для тестов
+    restart: unless-stopped
+
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    environment:
+      - RADIUS_HOST=radius
+      - RADIUS_PORT=1812
+      - RADIUS_SECRET=WebSharedSecret123
+      - FLASK_SECRET=dev-secret-change-me 
+    ports:
+      - "8080:8080"
+    depends_on:
+      - radius
+    restart: unless-stopped
+    volumes:
+      - ./radius/whitelist.txt:/etc/aaa/whitelist.txt:ro
+
+  sshd:
+    build: ./sshd
+    container_name: sshd
+    ports:
+      - "2222:22"
+    volumes:
+      - ./radius/whitelist.txt:/etc/aaa/whitelist.txt:ro
+    depends_on:
+      - radius
+    restart: unless-stopped
+    

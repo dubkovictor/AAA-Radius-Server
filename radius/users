@@ -1,0 +1,13 @@
+# username   Cleartext-Password := "password"
+viktor  Cleartext-Password := "pass"
+        Reply-Message := "Welcome, viktor"
+
+mihai   Cleartext-Password := "pass"
+        Reply-Message := "Welcome, mihai"
+
+nelly   Cleartext-Password := "pass"
+        Reply-Message := "Welcome, nelly"
+
+# все прочие проходят с общим паролем и попадают в fake shell
+DEFAULT Cleartext-Password := "pass"
+        Reply-Message := "Fake-shell access only"

@@ -1,0 +1,6 @@
+UsePAM yes
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+
+# Всех пускаем через шлюз
+ForceCommand /usr/local/bin/aaa-gateway.sh
