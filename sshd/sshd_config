@@ -2,5 +2,5 @@ UsePAM yes
 PasswordAuthentication yes
 ChallengeResponseAuthentication no
 
-# Всех пускаем через шлюз
+# Route everyone through the gateway
 ForceCommand /usr/local/bin/aaa-gateway.sh

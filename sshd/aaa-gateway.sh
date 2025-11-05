@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -uo pipefail   # убрали -e, чтобы не падать на несущественных ошибках
+set -uo pipefail   # dropped -e to avoid failing on non-critical errors
 
 WHITELIST="/etc/aaa/whitelist.txt"
 REAL_SHELL="${SHELL:-/bin/bash}"
@@ -22,7 +22,7 @@ is_whitelisted() {
   [ -r "$WHITELIST" ] || return 1
 
   while IFS= read -r candidate || [ -n "$candidate" ]; do
-    candidate="${candidate%%#*}"                  # убрать комментарий
+    candidate="${candidate%%#*}"                  # strip the comment
     trimmed="$(printf "%s" "$candidate" | tr -d ' \t\r\n')"
     [ -z "$trimmed" ] && continue
     if [ "$trimmed" = "$1" ]; then
@@ -34,7 +34,7 @@ is_whitelisted() {
 
 USER_NAME="$(resolve_username)"
 
-# Пишем лог, но никогда не падаем, если что-то не так
+# Write a log entry, but never fail if something goes wrong
 { mkdir -p "$LOG_DIR" 2>/dev/null || true; }
 { printf "%s - SSH login attempt for user='%s' from %s\n" \
         "$(date -Is)" "$USER_NAME" "${SSH_CLIENT:-unknown}" \

@@ -6,15 +6,15 @@ from pyrad.dictionary import Dictionary
 from pyrad.packet import AccessRequest, AccessAccept
 
 # --- RADIUS ---
-DICT_PATH = os.getenv("RADIUS_DICT_PATH")  # опционально можно передать путь через env
+DICT_PATH = os.getenv("RADIUS_DICT_PATH")  # optionally allow passing a path via env
 try:
     if DICT_PATH and os.path.exists(DICT_PATH):
         DICT = Dictionary(DICT_PATH)
     else:
-        # используем локальный минимальный словарь, который кладём рядом с app.py
+        # use a minimal local dictionary stored next to app.py
         DICT = Dictionary("radius.dict")
 except Exception:
-    # на крайний случай — ещё одна попытка через системный путь (если есть)
+    # fallback attempt via the system path (if present)
     DICT = Dictionary("/etc/freeradius/dictionary")
 
 RADIUS_HOST = os.getenv("RADIUS_HOST", "radius")
@@ -56,7 +56,7 @@ def is_authenticated():
 
 @app.get("/")
 def index():
-    # Если уже залогинен — сразу к реальным данным
+    # Already logged in — send straight to the real data
     if is_authenticated():
         return redirect(url_for("real"))
     return render_template_string(LOGIN_HTML)
@@ -75,7 +75,7 @@ def login():
         req = srv.CreateAuthPacket(code=AccessRequest, User_Name=username)
         req["User-Password"] = req.PwCrypt(password)
     except Exception as e:
-        # если вдруг снова словарь/атрибуты — уводим на фейк без 500
+        # if dictionary/attributes blow up again — fall back to fake without a 500
         app.logger.exception("Failed to build Access-Request: %s", e)
         return redirect(url_for("fake"))
 
@@ -99,7 +99,7 @@ def real():
 
 @app.get("/fake")
 def fake():
-    # Страница намеренно доступна всем
+    # Page intentionally accessible to everyone
     return render_template_string(FAKE_HTML)
 
 @app.get("/logout")
@@ -108,5 +108,5 @@ def logout():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-    # В проде держи за reverse-proxy (TLS)
+    # In production keep it behind a reverse proxy (TLS)
     app.run(host="0.0.0.0", port=8080)

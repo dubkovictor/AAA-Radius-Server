@@ -1,7 +1,7 @@
 services:
   radius:
     image: freeradius/freeradius-server:latest
-    platform: linux/amd64   # Запуск под эмуляцией, т.к. нет arm64-версии
+    platform: linux/amd64   # Run under emulation because there is no arm64 build
     container_name: radius
     ports:
       - "1812:1812/udp"
@@ -10,7 +10,7 @@ services:
       - ./radius/clients.conf:/etc/freeradius/clients.conf:ro
       - ./radius/users:/etc/freeradius/mods-config/files/authorize:ro
       - ./radius/mods-enabled/pap:/etc/freeradius/mods-enabled/pap:ro
-    command: ["-f", "-X"]  # в фореграунде с дебаг-логами удобно для тестов
+    command: ["-f", "-X"]  # Foreground with debug logs, handy for tests
     restart: unless-stopped
 
   webapp:

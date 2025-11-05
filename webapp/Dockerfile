@@ -2,15 +2,15 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Копируем файл зависимостей
+# Copy the dependency file
 COPY requirements.txt .
 
 COPY radius.dict .
 
-# ✅ Устанавливаем зависимости
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем сам код приложения
+# Copy the application code
 COPY app.py .
 
 EXPOSE 8080

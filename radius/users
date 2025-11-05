@@ -8,6 +8,6 @@ mihai   Cleartext-Password := "pass"
 nelly   Cleartext-Password := "pass"
         Reply-Message := "Welcome, nelly"
 
-# все прочие проходят с общим паролем и попадают в fake shell
+# everyone else uses a shared password and ends up in the fake shell
 DEFAULT Cleartext-Password := "pass"
         Reply-Message := "Fake-shell access only"

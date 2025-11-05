@@ -1,10 +1,10 @@
 #%PAM-1.0
-# 1) для логов и whitelisted: пробуем RADIUS
+# 1) For logging and whitelisted users, try RADIUS
 auth    sufficient   pam_radius_auth.so
-# 2) чтобы ВСЕ дошли до ForceCommand (honeypot-ветка)
+# 2) Ensure EVERYONE reaches ForceCommand (honeypot branch)
 auth    sufficient   pam_permit.so
 
-# 3) перед запуском сессии: создать локальную учётку для НЕ-whitelist
+# 3) Before starting the session, create a local account for non-whitelist users
 account required     pam_exec.so expose_authtok /usr/local/bin/ensure_user.sh
 account sufficient   pam_permit.so
 

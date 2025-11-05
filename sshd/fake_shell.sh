@@ -9,7 +9,7 @@ cat <<'EOF'
 только тестовые «фейковые» данные. Любая деятельность логируется.
 EOF
 
-# Примитивная "оболочка"
+# Simple "shell"
 while true; do
   printf "\n(fake)> "
   if ! read -r cmd; then break; fi
